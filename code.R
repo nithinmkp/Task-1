@@ -10,3 +10,5 @@ df<-read_excel("table.xlsx",sheet = "Sheet2")
 ntype<-table(factor(df$type))
 level_ntpe<-levels(factor(df$type))
 sectors<-levels(factor(df$field))
+
+df <- df %>% slice(1:10)

@@ -17,12 +17,13 @@ This is the `r rmarkdown::metadata$title`. There are a total of `r nrow(df)` res
 
 ```{glue mainchunk,eval=F}
 # {institute}
-{institute} was established in {Established} and is headquartered at {glue("{Head}")}. It works under the aegis of {tolower(type)} government and works primarily in the {tolower(field)} sector. The primary research of the organization is on **{tolower(focus)}**. The organisation has made commendable progress in the past and below are few of their achievements:
-  
+{institute}  works under the aegis of {tolower(type)} government and works primarily in the {tolower(field)} sector. The primary research of the organization is on **{tolower(focus)}**.
+
+The ongoing researches of the institute are   
+- {Ongoing_Researches}  
+
+Below are the achievements  
 - {Achievements} 
-
-
-
 
 ```
 ```{glue ref.label="mainchunk",data=df}
