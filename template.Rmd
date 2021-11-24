@@ -1,0 +1,31 @@
+---
+title: "Report on  Science and Technology Research Institutes in Kerala"
+output: html_document
+date: '`r format(Sys.Date(),"%B %d, %Y")`'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(devtools)
+library(knitr)
+library(epoxy)
+source("code.R",local = knitr::knit_global())
+```
+
+This is the `r rmarkdown::metadata$title`. There are a total of `r nrow(df)` research institutions in Kerala. Of these, `r ntype[1]` are `r level_ntpe[1]` government owned and `r ntype[2]` `r if_else( ntype[2]<2,"is","are")` `r level_ntpe[2]` owned. Major sectors of research of these institutions are `r glue::glue_collapse(x = sectors, ", ", last = " and ")`.
+
+```{glue mainchunk,eval=F}
+# {institute}
+{institute} was established in {Established} and is headquartered at {glue("{Head}")}. It works under the aegis of {tolower(type)} government and works primarily in the {tolower(field)} sector. The primary research of the organization is on **{tolower(focus)}**. The organisation has made commendable progress in the past and below are few of their achievements:
+  
+- {Achievements} 
+
+
+
+
+```
+```{glue ref.label="mainchunk",data=df}
+
+```
+
