@@ -16,16 +16,20 @@ source("code.R",local = knitr::knit_global())
 This is the `r rmarkdown::metadata$title`. There are a total of `r nrow(df)` research institutions in Kerala. Of these, `r ntype[1]` are `r level_ntpe[1]` government owned and `r ntype[2]` `r if_else( ntype[2]<2,"is","are")` `r level_ntpe[2]` owned. Major sectors of research of these institutions are `r glue::glue_collapse(x = sectors, ", ", last = " and ")`.
 
 ```{glue mainchunk,eval=F}
-# {institute}
+# {stri_trans_totitle(institute)}
 {institute}  works under the aegis of {tolower(type)} government and works primarily in the {tolower(field)} sector. The primary research of the organization is on **{tolower(focus)}**.
 
-The ongoing researches of the institute are   
-- {Ongoing_Researches}  
-
-Below are the achievements  
-- {Achievements} 
+The institute has following research divisions to undertake research.  
+- {Research_Divisions}    
+The organisation is equiped with folling research infrastructure  
+- {stri_trans_totitle(RD_Infrastructure)}  
+The ongoing researches in the institute are     
+- {Ongoing_Researches}    
+The organisation has made commendable progress and below are few of their achievements  
+-{Achievements}
 
 ```
+
 ```{glue ref.label="mainchunk",data=df}
 
 ```
