@@ -1,6 +1,9 @@
 ---
 title: "Report on  Science and Technology Research Institutes in Kerala"
-output: html_document
+output:
+  word_document:
+    reference_docx: style.docx
+    number_sections: yes
 date: '`r format(Sys.Date(),"%B %d, %Y")`'
 ---
 
@@ -13,20 +16,56 @@ library(epoxy)
 source("code.R",local = knitr::knit_global())
 ```
 
-This is the `r rmarkdown::metadata$title`. There are a total of `r nrow(df)` research institutions in Kerala. Of these, `r ntype[1]` are `r level_ntpe[1]` government owned and `r ntype[2]` `r if_else( ntype[2]<2,"is","are")` `r level_ntpe[2]` owned. Major sectors of research of these institutions are `r glue::glue_collapse(x = sectors, ", ", last = " and ")`.
+This is the `r rmarkdown::metadata$title`. There are a total of `r nrow(df)` research institutions in Kerala. Of these, `r ntype[1]` are `r level_ntpe[1]` government owned and `r ntype[2]` `r if_else( ntype[2]<2,"is","are")` `r level_ntpe[2]` owned `r if_else(no_info==0,".",
+        paste("while there was",no_info, 
+              "organization about which information was not available. ")
+)`Major sectors of research of these institutions are `r glue::glue_collapse(x = sectors[-length(sectors)], ", ", last = " and ")`.
+
+Detailed information about the fields of research of these organizations are given below
+```{r include=FALSE}
+is_docx <- knitr::pandoc_to("docx")
+is_latex <- knitr::opts_knit$get("rmarkdown.pandoc.to") == 'latex'
+```
+
+```{r ft.align="left",ft.split=T,echo=F,results='asis',warning=F,message=F,eval=is_docx}
+library(flextable)
+require("gdtools")
+ft<-flextable(field_table)
+ft<-autofit(ft)
+ft<-theme_booktabs(ft)
+ft<-flextable::set_caption(ft,"No of Organizations by Field of Research")
+ft <- flextable::footnote(ft, i=14,j=1,
+               value = as_paragraph("Some oganizations were under different names or the website was not functional"),
+               ref_symbols = "*",
+               part = "body",inline = )
+ft<-fontsize(ft,size = 10,part = "all")
+fontname<-"Times New Roman"
+ft<-flextable::font(ft,fontname = fontname,part = "all")
+ft
+```
+```{r tab1,eval=is_latex,echo=F,results='asis',fig.pos='!H',warning=F,message=F}
+library(kableExtra)
+field_table %>% kable(caption ="No of Organizations by Field of Research" ) %>% kable_styling(full_width = F,
+                              latex_options = "hold_position") %>% 
+  kable_classic()
+```
+
 
 ```{glue mainchunk,eval=F}
-# {stri_trans_totitle(institute)}
-{institute}  works under the aegis of {tolower(type)} government and works primarily in the {tolower(field)} sector. The primary research of the organization is on **{tolower(focus)}**.
+# {institute}
+{new_ins}  works under the aegis of {tolower(type)} government and works primarily in the {tolower(field)} sector. The primary research of the organization is on **{tolower(focus)}**.
 
-The institute has following research divisions to undertake research.  
-- {Research_Divisions}    
-The organisation is equiped with folling research infrastructure  
-- {stri_trans_totitle(RD_Infrastructure)}  
-The ongoing researches in the institute are     
-- {Ongoing_Researches}    
-The organisation has made commendable progress and below are few of their achievements  
--{Achievements}
+- The institute has following research divisions to undertake research.  
+  - {Research_Divisions}
+
+- The organisation is equiped with following research infrastructure  
+  - {stri_trans_totitle(RD_Infrastructure)}  
+
+- The ongoing researches in the institute are     
+  - {Ongoing_Researches}   
+
+- The organisation has made commendable progress and below are few of their achievements  
+  - {Achievements}
 
 ```
 
